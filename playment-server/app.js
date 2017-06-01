@@ -20,55 +20,51 @@ app.use(function (req, res, next) {
 });
 
 app.get('/', function (req, res) {
+    if(req.query.create == "true"){
+        console.log(req,res);
+        var id = req.query.dirName;
+        var dir = './tmp';
+        if(id){
+            dir=id;
+        }
+        console.log(dir)
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+        res.send('{success:"ok"}')
+    }else {
+        var id = req.query.path;    
+        var path = '/';
+        if(id){
+            path=id;
+        }
+        var directories = [];
+        var i = 0;
+        fs.readdir(path, (err, files) => {
+            var filelength = files.length;
 
-    var id = req.query.path;    
-    var path = '/';
-    if(id){
-        path=id;
-    }
-    var directories = [];
-    var i = 0;
-    fs.readdir(path, (err, files) => {
-        var filelength = files.length;
-
-        files.forEach(file => {
-            console.log(file);
-            fs.lstat(path + '/'+file, (err, stats) => {
-                console.log(stats.isDirectory());
-                i++;
-                if(stats.isDirectory()){
-                    directories.push(file);
-                }
-                if(filelength == i){
-                    var currentDir = {
-                        directories: directories
-                    };
-                    res.json(currentDir);
-                }
+            files.forEach(file => {
+                console.log(file);
+                fs.lstat(path + '/'+file, (err, stats) => {
+                    console.log(stats.isDirectory());
+                    i++;
+                    if(stats.isDirectory()){
+                        directories.push(file);
+                    }
+                    if(filelength == i){
+                        var currentDir = {
+                            directories: directories
+                        };
+                        res.json(currentDir);
+                    }
+                });
             });
         });
-    });
-})
-
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-app.use(bodyParser.json());
-app.post('/', function(res, req){
-    console.log(req,res);
-    var id = req.body.dirName;
-    var dir = './tmp';
-    if(id){
-        dir=id;
     }
-    if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
-    }
-    res.send('{success:"ok"}')
+    
 })
-
 
 
 app.listen(3001, function () {
-  console.log('Example app listening on port 3000!')
+  console.log('Example app listening on port 3001!')
 })

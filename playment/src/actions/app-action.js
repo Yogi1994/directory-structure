@@ -35,7 +35,8 @@ export function fetchDirList(filePath: string) {
 
 export function createDirectory(dirName: string) {
   return (dispatch) => {
-    return axios.post('http://localhost:3001',{body: {dirName: dirName}})
+    console.log('http://localhost:3001?create=true&dirName='+dirName)
+    return axios.get('http://localhost:3001?create=true&dirName='+dirName)
     .then(res => {
       console.log(res);
       
