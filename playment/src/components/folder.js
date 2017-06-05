@@ -1,32 +1,30 @@
 import React, { Component } from 'react';
 import '../styles/folder.css';
+import folderimg from '../img/folder.png';
 import * as AppActions from '../actions/app-action';
 import {connect} from 'react-redux';
 
 class Folder extends Component {
 
-  constructor(props){
-    super(props);
-  }
-
-
   /**
    * 
    */
   _onClickChangeDir() {
-    this.props.fetchDirList(this.props.filePath + '/' + this.props.name);
+    var path = this.props.filePath;
+    path.push(this.props.name);
+    this.props.fetchDirList(path);
   }
 
   renderLabel() {
       return (
-        <p>{this.props.name}</p>
+        <div className="folderLabel inRow">{this.props.name}</div>
       );
   }
 
   render() {
     return (
-      <div onClick={this._onClickChangeDir.bind(this)} >
-        {/*<img onClick={this._onClickChangeBorder.bind(this)} onKeyPress={this.handleKeyPress} src={this.props.src} width="100" height="100" alt="img" />*/}
+      <div className="imageOuterContainer" onClick={this._onClickChangeDir.bind(this)} >
+        <img src={folderimg} className="mainFolderImage inRow" height="20px" width="20px"></img>
         {this.renderLabel()}
       </div>
     );

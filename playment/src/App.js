@@ -20,7 +20,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchDirList();
+    this.props.fetchDirList(["/"]);
   }
 
 
@@ -30,14 +30,23 @@ class App extends Component {
 
   createDirectory(){
     if(this.state.dirToCreate !== ""){
-      this.props.createDirectory(this.props.filePath + '/' +this.state.dirToCreate);
+      this.setState({dirToCreate:""});
+      this.props.createDirectory(this.state.dirToCreate, this.props.filePath);
     }
   }
 
   onClickBack(){
     var path = this.props.filePath;
-    path = path.substring(0,path.lastIndexOf("/") );
+    path = path.slice(0,path.length -1);
     this.props.fetchDirList(path);
+  }
+
+  getPath() {
+    var path = "";
+    for( var i =0 ; i< this.props.filePath.length; i++){
+      path += this.props.filePath[i] + " > ";
+    }
+    return path;
   }
 
   render() {
@@ -52,14 +61,34 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <h1>hi</h1>
-        
-        <div>
-          <button onClick={this.onClickBack.bind(this)}>Back</button>
-          <input type="text" value={this.state.dirToCreate} onChange={this.handleChangeInput.bind(this)} />
-          <button onClick={this.createDirectory.bind(this)}>Create</button>
+        <h1>hi, I am Yogesh Chauhan</h1>
+        <p>
+          <a href="https://github.com/yogi1994">Github</a>
+          <br />
+          <a href="http://teedesigner.xp3.biz/">Tee shirt Designer Old</a>
+        </p>
+        <div className="container topContainer">
+          <div>File Path: <a href="#">{this.getPath()}</a></div>
+          
+          <div className="row">
+            <div className="col-md-3">
+              <button type="button" className="btn" onClick={this.onClickBack.bind(this)}>Back</button>
+            </div>
+            <div className="col-md-6">
+              <input type="text" className="form-control" value={this.state.dirToCreate} onChange={this.handleChangeInput.bind(this)} />
+            </div>
+            <div className="col-md-3">
+
+              <button type="button" className="btn" onClick={this.createDirectory.bind(this)}>Create</button>
+            </div>
+          </div>
         </div>
-        <PresentDirectory dirList={this.props.dirList} />
+
+        <div className="container">
+          <div className="fileContainer row">
+            <PresentDirectory dirList={this.props.dirList} />
+          </div>
+        </div>
       </div>
     );
   }
@@ -77,8 +106,8 @@ function mapDispatchToProps(dispatch : Function) {
     fetchDirList: (filePath:string) => {
       dispatch(AppActions.fetchDirList(filePath));
     },
-    createDirectory: (dir:string) => {
-      dispatch(AppActions.createDirectory(dir));
+    createDirectory: (dir:string, filePath: Array<string>) => {
+      dispatch(AppActions.createDirectory(dir, filePath));
     }
   };
 }

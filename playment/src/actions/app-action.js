@@ -2,47 +2,95 @@
  * @fileoverview Action creators for app.
  */
 
-import axios from 'axios';
+// import axios from 'axios';
 
 const LOAD_PWD_LIST = 'LOAD_PWD_LIST';
 
-// const d = {"directories":["bin","boot","cdrom","data","dev","etc","home","initrd.img","initrd.img.old","lib","lib64","lost+found","media","mnt","opt","proc","root","run","sbin","snap","srv","swapfile","sys","tmp","usr","var","vmlinuz","vmlinuz.old"]};
+const MAIN_DIR = {
+  "/":{
+    "Folder1":{
+      "bin":{},
+      "home":{
+        "Yogesh": {
+          "dev": {
+            "react":{
+              "Project1":{
+                "code":{}
+              },
+              "Project2":{
+                "code":{}
+              }
+            },
+            "python":{
+              "Project1":{
+                "code":{}
+              },
+              "Project2":{
+                "code":{}
+              }
+            }
+          },
+          "timepass": {
+            "react":{
+              "Project1":{
+                "code":{}
+              },
+              "Project2":{
+                "code":{}
+              }
+            },
+            "python":{
+              "Project1":{
+                "code":{}
+              },
+              "Project2":{
+                "code":{}
+              }
+            }
+          }
+        }
+      }
+    },
+    "Folder2":{}
+  }
+
+};
+
 /**
  * this will fetch directories list.
  */
-export function fetchDirList(filePath: string) {
-
-  return (dispatch) => {
-    if(filePath === undefined){
-      filePath = '/';
-    }
-    console.log('http://localhost:3001?path=' + filePath)
-    return axios.get('http://localhost:3001?path=' + filePath)
-    .then(res => {
-      console.log(res);
-      dispatch({
-        type: LOAD_PWD_LIST,
-        data: res.data,
-        filePath: filePath
-      });
-    })
-    .catch(error => {
-      console.log('Dir List', error);
-    });
+export function fetchDirList(filePath: Array<string>) {
+  var directories = MAIN_DIR;
+  for(let i = 0 ; i < filePath.length; i++){
+    directories = directories[filePath[i]];
+  }
+  let dirList = [];
+  for( let dirName in directories){
+    dirList.push(dirName);
+  }
+  return {
+    type: LOAD_PWD_LIST,
+    data: {directories: dirList},
+    filePath: filePath
   };
 }
 
-
-export function createDirectory(dirName: string) {
-  return (dispatch) => {
-    console.log('http://localhost:3001?create=true&dirName='+dirName)
-    return axios.get('http://localhost:3001?create=true&dirName='+dirName)
-    .then(res => {
-      console.log(res);
-      
-    })
-    .catch(error => {
-      console.log('Dir List', error);
-    });
+/**
+ * This will create directory.
+ */
+export function createDirectory(dirName: string, filePath: Array<string>) {
+  var directories = MAIN_DIR;
+  for(let i = 0 ; i < filePath.length; i++){
+    directories = directories[filePath[i]];
+  }
+  directories[dirName] = {};
+  let dirList = [];
+  for( let dirName in directories){
+    dirList.push(dirName);
+  }
+  return {
+    type: LOAD_PWD_LIST,
+    data: {directories: dirList},
+    filePath: filePath
   };
 }

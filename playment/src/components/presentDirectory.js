@@ -15,10 +15,21 @@ class PresentDirectory extends Component {
     }
   }
 
+  emptyFolder() {
+    return (
+      <div>
+        Nothing to show here
+      </div>
+    );
+  }
+
   renderDirList() {
+    if(this.props.dirList.length === 0){
+      return this.emptyFolder();
+    }
     return this.props.dirList.map(function(name,index) {
       return (
-        <div key={index} className="col-md-3 gridContainer">
+        <div key={index} className="col-md-12 gridContainer">
           <Folder name={name}/>
         </div>
       );
@@ -27,7 +38,7 @@ class PresentDirectory extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div >
           <div className="row">
             {this.renderDirList()}
           </div>

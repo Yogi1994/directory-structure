@@ -1,20 +1,18 @@
 .imageOuterContainer{
-
+	background: #dedede;
+	border-bottom: 1px solid #acacff;
+	height: 50px;
 }
 
-
-.shadowc {
-	background-color: yellow;
-}
-.defaultBorder {
-	border: 2px solid transparent;
+.mainFolderImage {
+  background: #aaaaaa;
+  margin:10px;
 }
 
-.redBorder {
-	border: 2px solid #F00;
+.inRow {
+	float: left;
 }
 
-.greenBorder {
-	border: 2px solid #0F0;
+.folderLabel {
+	margin: 10px;
 }
-
